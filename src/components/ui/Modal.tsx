@@ -19,6 +19,7 @@ const maxWidthClasses = {
 
 export function Modal({ open, onClose, title, children, maxWidth = 'md' }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const mousedownOnBackdrop = useRef(false);
 
   useEffect(() => {
     if (!open) return;
@@ -46,8 +47,11 @@ export function Modal({ open, onClose, title, children, maxWidth = 'md' }: Modal
     <div
       ref={overlayRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+      onMouseDown={(e) => {
+        mousedownOnBackdrop.current = e.target === overlayRef.current;
+      }}
       onClick={(e) => {
-        if (e.target === overlayRef.current) onClose();
+        if (e.target === overlayRef.current && mousedownOnBackdrop.current) onClose();
       }}
     >
       <div
