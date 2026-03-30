@@ -1,36 +1,247 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gitea 사용자 관리 도구
 
-## Getting Started
+Gitea 서버의 사용자 계정을 웹 브라우저에서 편리하게 관리할 수 있는 관리자 도구입니다.
+사용자 추가, 조회, 수정, 삭제를 마우스 클릭만으로 할 수 있습니다.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 시작하기 전에 필요한 것
+
+아래 두 가지가 컴퓨터에 설치되어 있어야 합니다.
+설치되어 있는지 모르겠다면 **1단계**부터 따라 하세요.
+
+- **Node.js** (버전 18 이상)
+- **pnpm** (패키지 관리 도구)
+
+---
+
+## 1단계 — Node.js 설치 확인 및 설치
+
+### 이미 설치되어 있는지 확인하기
+
+1. 키보드에서 `Windows 키 + R` 을 누릅니다.
+2. `cmd` 라고 입력하고 Enter를 누릅니다. (검은 창이 열립니다)
+3. 아래 명령어를 입력하고 Enter를 누릅니다.
+
+```
+node --version
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. `v18.0.0` 처럼 버전 숫자가 나오면 이미 설치된 것입니다. **2단계로 이동하세요.**
+5. 오류가 나오거나 아무것도 나오지 않으면 아래 방법으로 설치하세요.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Node.js 설치하기
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. 웹 브라우저에서 https://nodejs.org 에 접속합니다.
+2. **LTS** 버튼을 클릭해서 설치 파일을 내려받습니다.
+3. 내려받은 파일을 실행하고 "다음" 버튼을 계속 눌러 설치를 완료합니다.
+4. 설치 후 cmd 창을 닫고 다시 열어서 `node --version` 으로 확인합니다.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 2단계 — pnpm 설치 확인 및 설치
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+cmd 창에서 아래 명령어를 입력합니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+pnpm --version
+```
 
-## Deploy on Vercel
+버전 숫자가 나오면 이미 설치된 것입니다. **3단계로 이동하세요.**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+설치되어 있지 않다면 아래 명령어를 입력해서 설치합니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+npm install -g pnpm
+```
+
+설치가 완료되면 다시 `pnpm --version` 으로 확인합니다.
+
+---
+
+## 3단계 — 프로그램 파일 내려받기
+
+### Git이 있는 경우
+
+cmd 창에서 아래 명령어를 입력합니다. (폴더를 저장할 위치로 먼저 이동하세요)
+
+```
+git clone https://github.com/sungkukpark/gitea-user-admin.git
+cd gitea-user-admin
+```
+
+### Git이 없는 경우
+
+1. https://github.com/sungkukpark/gitea-user-admin 에 접속합니다.
+2. 초록색 **Code** 버튼을 클릭합니다.
+3. **Download ZIP** 을 클릭해서 파일을 내려받습니다.
+4. 내려받은 ZIP 파일을 원하는 위치에 압축 해제합니다.
+5. cmd 창에서 압축 해제된 폴더로 이동합니다. 예시:
+
+```
+cd C:\Users\내이름\Downloads\gitea-user-admin
+```
+
+---
+
+## 4단계 — 필요한 패키지 설치
+
+cmd 창에서 프로젝트 폴더 안에 있는지 확인한 후 아래 명령어를 실행합니다.
+
+```
+pnpm install
+```
+
+인터넷에서 필요한 파일들을 자동으로 내려받습니다. 잠시 기다려 주세요.
+
+---
+
+## 5단계 — Gitea 연결 정보 설정
+
+프로그램이 Gitea 서버에 접속하려면 서버 주소와 관리자 토큰이 필요합니다.
+
+### .env.local 파일 만들기
+
+1. 프로젝트 폴더 안에 `.env.example` 파일이 있습니다.
+2. 이 파일을 복사해서 이름을 `.env.local` 로 바꿉니다.
+
+   cmd 창에서 아래 명령어로 복사할 수 있습니다.
+
+   ```
+   copy .env.example .env.local
+   ```
+
+3. `.env.local` 파일을 메모장으로 엽니다. (파일을 우클릭 → 연결 프로그램 → 메모장)
+
+4. 아래 두 줄을 자신의 환경에 맞게 수정합니다.
+
+   ```
+   GITEA_BASE_URL=http://내_Gitea_서버_주소:포트번호
+   GITEA_ADMIN_TOKEN=여기에_관리자_토큰_붙여넣기
+   ```
+
+   **예시:**
+   ```
+   GITEA_BASE_URL=http://192.168.0.10:3000
+   GITEA_ADMIN_TOKEN=a1b2c3d4e5f6...
+   ```
+
+5. 저장 후 메모장을 닫습니다.
+
+### 관리자 토큰 발급 방법
+
+관리자 토큰이 없다면 Gitea에서 새로 발급해야 합니다.
+
+1. 웹 브라우저에서 Gitea 서버에 **관리자 계정**으로 로그인합니다.
+2. 오른쪽 위 프로필 사진을 클릭합니다.
+3. **설정(Settings)** 을 클릭합니다.
+4. 왼쪽 메뉴에서 **애플리케이션(Applications)** 을 클릭합니다.
+5. "토큰 이름" 칸에 적당한 이름(예: `admin-tool`)을 입력합니다.
+6. **토큰 생성** 버튼을 클릭합니다.
+7. 화면에 나타난 토큰 문자열을 복사해서 `.env.local` 에 붙여넣습니다.
+
+> **주의:** 토큰은 이 화면을 벗어나면 다시 볼 수 없습니다. 반드시 복사해 두세요.
+
+---
+
+## 6단계 — 프로그램 실행
+
+cmd 창에서 아래 명령어를 입력합니다.
+
+```
+pnpm dev
+```
+
+아래와 같은 메시지가 나오면 정상적으로 실행된 것입니다.
+
+```
+▲ Next.js 16.x.x
+- Local: http://localhost:3000
+```
+
+---
+
+## 7단계 — 브라우저에서 접속
+
+웹 브라우저(Chrome, Edge 등)를 열고 주소창에 아래를 입력합니다.
+
+```
+http://localhost:3000
+```
+
+자동으로 사용자 목록 화면으로 이동됩니다.
+
+---
+
+## 주요 기능 사용법
+
+### 사용자 목록 보기
+
+- 프로그램 실행 후 바로 전체 사용자 목록이 표시됩니다.
+- 상단 검색창에 사용자명, 이메일, 이름을 입력하면 실시간으로 필터링됩니다.
+- 화면 오른쪽에 **현재 페이지 인원 / 전체 인원** 수가 표시됩니다.
+
+### 새 사용자 추가
+
+1. 오른쪽 위 **새 사용자** 버튼을 클릭합니다.
+2. 사용자명, 이메일, 비밀번호를 입력합니다.
+3. **생성** 버튼을 클릭합니다.
+
+### 사용자 정보 수정
+
+1. 목록에서 수정할 사용자의 **편집** 버튼(연필 아이콘)을 클릭합니다.
+2. 변경할 내용을 수정합니다.
+3. **저장** 버튼을 클릭합니다.
+
+### 사용자 삭제
+
+1. 목록에서 삭제할 사용자의 **삭제** 버튼(휴지통 아이콘)을 클릭합니다.
+2. 확인 창에 사용자명을 직접 입력합니다.
+3. **삭제** 버튼을 클릭합니다.
+
+> **주의:** 삭제는 되돌릴 수 없습니다. 신중하게 진행하세요.
+
+### 사용자 상세 정보 보기
+
+목록에서 사용자명을 클릭하거나 **상세** 버튼을 클릭하면 해당 사용자의 상세 정보를 볼 수 있습니다.
+
+---
+
+## 프로그램 종료
+
+cmd 창에서 `Ctrl + C` 를 누르면 서버가 종료됩니다.
+
+---
+
+## 자주 묻는 질문
+
+**Q. 브라우저에서 접속이 안 됩니다.**
+
+cmd 창에 오류 메시지가 있는지 확인하세요. `.env.local` 파일이 올바르게 만들어졌는지 다시 확인하세요.
+
+**Q. "인증 오류" 메시지가 나옵니다.**
+
+`.env.local` 의 `GITEA_ADMIN_TOKEN` 값이 올바른지 확인하세요. 토큰을 복사할 때 앞뒤에 공백이 들어가지 않도록 주의하세요.
+
+**Q. 사용자 목록이 비어 있습니다.**
+
+`GITEA_BASE_URL` 주소가 정확한지 확인하세요. Gitea 서버가 실행 중인지도 확인하세요.
+
+**Q. 매번 cmd 창을 열기 번거롭습니다.**
+
+프로젝트 폴더 안에 `start.bat` 파일을 만들고 아래 내용을 저장하면 더블클릭으로 실행할 수 있습니다.
+
+```bat
+@echo off
+cd /d %~dp0
+pnpm dev
+pause
+```
+
+---
+
+## 보안 주의사항
+
+- `.env.local` 파일에는 관리자 토큰이 저장되어 있습니다. 이 파일을 다른 사람에게 보내거나 인터넷에 올리지 마세요.
+- 이 도구는 내부 네트워크에서만 사용하는 것을 권장합니다.
+- 사용하지 않을 때는 cmd 창에서 `Ctrl + C` 로 서버를 종료하세요.
