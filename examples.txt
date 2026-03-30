@@ -1,0 +1,9 @@
+curl -X GET 'http://namonba.asuscomm.com:3001/api/v1/admin/users' \
+  -H 'accept: application/json' \
+  -H 'Authorization: token 67d3b38774845f1d2fa944f2a76ea69b02190687'
+
+curl -X GET "http://namonba.asuscomm.com:3001/api/v1/users/Awal.Plus" \
+  -H 'accept: application/json" -H "Authorization: token 67d3b38774845f1d2fa944f2a76ea69b02190687'
+
+curl -X DELETE "http://namonba.asuscomm.com:3001/api/v1/admin/users/Awal.Plus" \
+  -H 'accept: application/json' -H 'Authorization: token 67d3b38774845f1d2fa944f2a76ea69b02190687'
